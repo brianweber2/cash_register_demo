@@ -4,6 +4,7 @@ import com.sun.istack.NotNull;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 public class Product {
@@ -20,6 +21,9 @@ public class Product {
 
     @NotNull
     private BigDecimal discountPrice;
+
+    @OneToMany(mappedBy = "product")
+    private List<LineItem> lineItems;
 
     public Product() {}
 
@@ -53,5 +57,13 @@ public class Product {
 
     public void setDiscountPrice(BigDecimal discountPrice) {
         this.discountPrice = discountPrice;
+    }
+
+    public List<LineItem> getLineItems() {
+        return lineItems;
+    }
+
+    public void setLineItems(List<LineItem> lineItems) {
+        this.lineItems = lineItems;
     }
 }

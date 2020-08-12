@@ -3,6 +3,7 @@ package com.cashregister.demo.model;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Customer {
@@ -17,6 +18,9 @@ public class Customer {
 
     @Column(unique = true)
     private String loyaltyNumber;
+
+    @OneToMany(mappedBy = "customer")
+    private List<Transaction> transactions;
 
     public Customer() {}
 
@@ -50,5 +54,13 @@ public class Customer {
 
     public void setLoyaltyNumber(String loyaltyNumber) {
         this.loyaltyNumber = loyaltyNumber;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
 }
