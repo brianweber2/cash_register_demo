@@ -5,12 +5,12 @@ import com.cashregister.demo.model.Item;
 import com.cashregister.demo.model.Product;
 import com.cashregister.demo.model.Transaction;
 import com.cashregister.demo.service.CustomerService;
+import com.cashregister.demo.service.ItemService;
 import com.cashregister.demo.service.ProductService;
 import com.cashregister.demo.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 @RestController
@@ -24,6 +24,9 @@ public class TransactionController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private ItemService itemService;
 
     @Autowired
 
@@ -83,11 +86,13 @@ public class TransactionController {
             }
         }
         for(Product product : productsFromDb) {
-            Item item = new Item(productTotal.get(product.getSku()), product, productQuantity.get(product.getSku()));
+            Item item = new Item();
+            item.setTotal(productTotal.get(product.getSku()));
+            item.setProduct(product);
+            item.setQuantity(productQuantity.get(product.getSku()));
             items.add(item);
         }
 
-//        Transaction t = new Transaction(total, customer, items);
         Transaction t = new Transaction();
         t.setTotal(total);
         t.setCustomer(customer);
@@ -95,7 +100,7 @@ public class TransactionController {
 
         Long transactionId = transactionService.save(t);
         Transaction transaction = transactionService.findById(transactionId);
-        response.put("transaction", transaction);
+        response.put("transaction", t);
         return response;
     }
 }

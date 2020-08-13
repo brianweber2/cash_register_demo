@@ -1,5 +1,6 @@
 package com.cashregister.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
@@ -11,7 +12,9 @@ public class Item {
     private Long id;
 
     @NotNull
-    @ManyToOne
+    @JsonManagedReference
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "transaction_id")
     private Transaction transaction;
 
     @NotNull
@@ -24,11 +27,7 @@ public class Item {
     @NotNull
     private int quantity;
 
-    public Item(double total, Product product, int quantity) {
-        this.total = total;
-        this.product = product;
-        this.quantity = quantity;
-    }
+    public Item() {}
 
     public Long getId() {
         return id;

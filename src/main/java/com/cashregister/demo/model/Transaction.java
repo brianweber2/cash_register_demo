@@ -1,7 +1,10 @@
 package com.cashregister.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,15 +15,13 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     private double total;
 
-    @NotNull
     @ManyToOne
     private Customer customer;
 
-    @NotNull
-    @OneToMany(mappedBy = "transaction")
+    @JsonManagedReference
+    @OneToMany(mappedBy = "transaction", fetch = FetchType.EAGER)
     private List<Item> items;
 
     public Transaction() {}
