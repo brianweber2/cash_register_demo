@@ -3,12 +3,14 @@ package com.cashregister.demo.dao;
 import com.cashregister.demo.model.Customer;
 import com.cashregister.demo.model.Product;
 import com.cashregister.demo.model.Transaction;
+import com.cashregister.demo.model.TransactionConfig;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.*;
 
 @Repository
 public class TransactionDaoImpl implements TransactionDao {
@@ -25,21 +27,21 @@ public class TransactionDaoImpl implements TransactionDao {
 
     @Override
     public Transaction findById(Long id) {
-        return null;
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.get(Transaction.class, id);
+        Hibernate.initialize(transaction.getLineItems());
+        session.close();
+        return transaction;
     }
 
     @Override
-    public void save(Transaction transaction) {
+    public Long save(Transaction transaction) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        session.save(transaction);
+        session.saveOrUpdate(transaction);
         session.getTransaction().commit();
         session.close();
-    }
-
-    @Override
-    public void update(Transaction transaction) {
-
+        return transaction.getId();
     }
 
     @Override
@@ -47,8 +49,8 @@ public class TransactionDaoImpl implements TransactionDao {
 
     }
 
-//    @Override
-//    public Transaction create(Customer customer, List<Product> products) {
-//        return null;
-//    }
+    @Override
+    public Transaction create(TransactionConfig transactionConfig) {
+        return null;
+    }
 }

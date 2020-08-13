@@ -8,6 +8,5 @@ public interface ProductService {
     List<Product> findAll();
     Product findBySku(String sku);
     void save(Product product);
-    void update(Product product);
     void delete(Product product);
 }

@@ -1,8 +1,10 @@
 package com.cashregister.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,7 +22,8 @@ public class Customer {
     private String loyaltyNumber;
 
     @OneToMany(mappedBy = "customer")
-    private List<Transaction> transactions;
+    @JsonIgnore
+    private List<Transaction> transactions = new ArrayList<>();
 
     public Customer() {}
 

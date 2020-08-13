@@ -19,7 +19,6 @@ public class Transaction {
     @ManyToOne
     private Customer customer;
 
-    @NotNull
     @OneToMany(mappedBy = "transaction")
     private List<LineItem> lineItems;
 

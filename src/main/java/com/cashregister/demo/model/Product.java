@@ -1,9 +1,11 @@
 package com.cashregister.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,7 +25,8 @@ public class Product {
     private BigDecimal discountPrice;
 
     @OneToMany(mappedBy = "product")
-    private List<LineItem> lineItems;
+    @JsonIgnore
+    private List<LineItem> lineItems = new ArrayList<>();
 
     public Product() {}
 

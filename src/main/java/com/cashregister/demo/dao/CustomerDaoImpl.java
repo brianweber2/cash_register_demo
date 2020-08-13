@@ -1,9 +1,9 @@
 package com.cashregister.demo.dao;
 
 import com.cashregister.demo.model.Customer;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -25,7 +25,8 @@ public class CustomerDaoImpl implements CustomerDao {
     @Override
     public Customer findById(Long id) {
         Session session = sessionFactory.openSession();
-        Customer customer = (Customer) session.createCriteria(Customer.class).add(Restrictions.eq("id", id)).uniqueResult();
+        Customer customer = session.get(Customer.class, id);
+        Hibernate.initialize(customer.getTransactions());
         session.close();
         return customer;
     }
@@ -34,14 +35,9 @@ public class CustomerDaoImpl implements CustomerDao {
     public void save(Customer customer) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        session.save(customer);
+        session.saveOrUpdate(customer);
         session.getTransaction().commit();
         session.close();
-    }
-
-    @Override
-    public void update(Customer customer) {
-
     }
 
     @Override

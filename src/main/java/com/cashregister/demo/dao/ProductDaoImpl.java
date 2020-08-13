@@ -1,6 +1,7 @@
 package com.cashregister.demo.dao;
 
 import com.cashregister.demo.model.Product;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -25,7 +26,8 @@ public class ProductDaoImpl implements ProductDao {
     @Override
     public Product findBySku(String sku) {
         Session session = sessionFactory.openSession();
-        Product product = (Product) session.createCriteria(Product.class).add(Restrictions.eq("sku", sku)).uniqueResult();
+        Product product = session.get(Product.class, sku);
+        Hibernate.initialize(product.getLineItems());
         session.close();
         return product;
     }
@@ -34,14 +36,9 @@ public class ProductDaoImpl implements ProductDao {
     public void save(Product product) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        session.save(product);
+        session.saveOrUpdate(product);
         session.getTransaction().commit();
         session.close();
-    }
-
-    @Override
-    public void update(Product product) {
-
     }
 
     @Override

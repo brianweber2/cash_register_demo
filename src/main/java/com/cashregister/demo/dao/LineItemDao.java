@@ -8,6 +8,5 @@ public interface LineItemDao {
     List<LineItem> findAll();
     LineItem findById(Long id);
     void save(LineItem lineItem);
-    void update(LineItem lineItem);
     void delete(LineItem lineItem);
 }
