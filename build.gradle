@@ -20,6 +20,7 @@ dependencies {
 	implementation 'org.hibernate:hibernate-core'
 	implementation 'org.apache.tomcat:tomcat-dbcp:8.0.32'
 	implementation 'org.hashids:hashids:1.0.1'
+	implementation 'org.hibernate:hibernate-jpamodelgen'
 	runtimeOnly 'com.h2database:h2'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'

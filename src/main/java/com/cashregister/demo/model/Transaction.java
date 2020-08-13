@@ -3,7 +3,6 @@ package com.cashregister.demo.model;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -13,16 +12,21 @@ public class Transaction {
     private Long id;
 
     @NotNull
-    private BigDecimal total;
+    private double total;
 
     @NotNull
     @ManyToOne
     private Customer customer;
 
+    @NotNull
     @OneToMany(mappedBy = "transaction")
-    private List<LineItem> lineItems;
+    private List<Item> items;
 
-    public Transaction() {}
+    public Transaction(double total, Customer customer, List<Item> items) {
+        this.total = total;
+        this.customer = customer;
+        this.items = items;
+    }
 
     public Long getId() {
         return id;
@@ -40,19 +44,19 @@ public class Transaction {
         this.customer = customer;
     }
 
-    public BigDecimal getTotal() {
+    public double getTotal() {
         return total;
     }
 
-    public void setTotal(BigDecimal total) {
+    public void setTotal(double total) {
         this.total = total;
     }
 
-    public List<LineItem> getLineItems() {
-        return lineItems;
+    public List<Item> getItems() {
+        return items;
     }
 
-    public void setLineItems(List<LineItem> lineItems) {
-        this.lineItems = lineItems;
+    public void setItems(List<Item> items) {
+        this.items = items;
     }
 }

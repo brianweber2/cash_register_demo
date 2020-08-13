@@ -24,10 +24,6 @@ public class Product {
     @NotNull
     private BigDecimal discountPrice;
 
-    @OneToMany(mappedBy = "product")
-    @JsonIgnore
-    private List<LineItem> lineItems = new ArrayList<>();
-
     public Product() {}
 
     public String getSku() {
@@ -60,13 +56,5 @@ public class Product {
 
     public void setDiscountPrice(BigDecimal discountPrice) {
         this.discountPrice = discountPrice;
-    }
-
-    public List<LineItem> getLineItems() {
-        return lineItems;
-    }
-
-    public void setLineItems(List<LineItem> lineItems) {
-        this.lineItems = lineItems;
     }
 }

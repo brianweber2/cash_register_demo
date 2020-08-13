@@ -1,10 +1,7 @@
 package com.cashregister.demo.dao;
 
-import com.cashregister.demo.model.Customer;
 import com.cashregister.demo.model.Product;
 import com.cashregister.demo.model.Transaction;
-import com.cashregister.demo.model.TransactionConfig;
-import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +26,6 @@ public class TransactionDaoImpl implements TransactionDao {
     public Transaction findById(Long id) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.get(Transaction.class, id);
-        Hibernate.initialize(transaction.getLineItems());
         session.close();
         return transaction;
     }
@@ -50,7 +46,7 @@ public class TransactionDaoImpl implements TransactionDao {
     }
 
     @Override
-    public Transaction create(TransactionConfig transactionConfig) {
+    public Transaction create(Long userId, List<Product> products) {
         return null;
     }
 }

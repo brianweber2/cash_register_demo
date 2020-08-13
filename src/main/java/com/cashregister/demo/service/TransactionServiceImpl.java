@@ -1,10 +1,8 @@
 package com.cashregister.demo.service;
 
 import com.cashregister.demo.dao.TransactionDao;
-import com.cashregister.demo.model.Customer;
 import com.cashregister.demo.model.Product;
 import com.cashregister.demo.model.Transaction;
-import com.cashregister.demo.model.TransactionConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +34,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Transaction create(TransactionConfig transactionConfig) {
-        return transactionDao.create(transactionConfig);
+    public Transaction create(Long userId, List<Product> products) {
+        return transactionDao.create(userId, products);
     }
 }
