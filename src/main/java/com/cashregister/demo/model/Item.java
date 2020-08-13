@@ -24,7 +24,11 @@ public class Item {
     @NotNull
     private int quantity;
 
-    Item() {}
+    public Item(double total, Product product, int quantity) {
+        this.total = total;
+        this.product = product;
+        this.quantity = quantity;
+    }
 
     public Long getId() {
         return id;

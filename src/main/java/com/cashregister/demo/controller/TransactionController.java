@@ -41,37 +41,61 @@ public class TransactionController {
 
         Customer customer = customerService.findById(customerId);
 
-        boolean hasLoyaltyRewards = false;
-        if(!customer.getLoyaltyNumber().isEmpty()) {
-            hasLoyaltyRewards = true;
-        }
-        System.out.printf("Customer %s has loyalty awards? %b%n", customer.getLastName(), hasLoyaltyRewards);
-
-        // Get unique skus to get the product objects from the database.
+        // Get unique skus to get the product objects from the database (source of truth).
         Set<String> skus = new HashSet<>();
         for (final Product product : products) {
             skus.add(product.getSku());
         }
-
         List<String> skusStrings = new ArrayList<String>();
         for(String sku : skus) {
             skusStrings.add(sku);
         }
         List<Product> productsFromDb = productService.findBySkus(skusStrings);
-        // Create Map with <sku, Product>
-        Map<String, Product> productMapBySku = new HashMap<>();
-        for(Product product : productsFromDb) {
-            productMapBySku.put(product.getSku(), product);
+
+        // Loop through products in payload to calculate quantity.
+        List<Item> items = new ArrayList<>();
+        Map<String, Integer> productQuantity = new HashMap<>();
+        for(Product product : products) {
+            if(productQuantity.containsKey(product.getSku())) {
+                productQuantity.put(product.getSku(), productQuantity.get(product.getSku()) + 1);
+            } else {
+                productQuantity.put(product.getSku(), 1);
+            }
         }
 
-        // Loop through products in payload to calculate quantity and total.
-        List<Item> items = new ArrayList<>();
-        double total = 23.95;
-        Transaction t = new Transaction(total, customer, items);
+        // Calculate total cost
+        double total = 0;
+        for(Product product : productsFromDb) {
+            if(!customer.getLoyaltyNumber().isEmpty()) {
+                total += product.getDiscountPrice() * productQuantity.get(product.getSku());
+            } else {
+                total += product.getDefaultPrice() * productQuantity.get(product.getSku());
+            }
+        }
 
-//        Long transactionId = transactionService.save(t);
-//        Transaction transaction = transactionService.findById(transactionId);
-//        response.put("transaction", transaction);
+        // Calculate item total and append to Items list
+        Map<String, Double> productTotal = new HashMap<>();
+        for(Product product : productsFromDb) {
+            if(!customer.getLoyaltyNumber().isEmpty()) {
+                productTotal.put(product.getSku(), productQuantity.get(product.getSku()) * product.getDiscountPrice());
+            } else {
+                productTotal.put(product.getSku(), productQuantity.get(product.getSku()) * product.getDefaultPrice());
+            }
+        }
+        for(Product product : productsFromDb) {
+            Item item = new Item(productTotal.get(product.getSku()), product, productQuantity.get(product.getSku()));
+            items.add(item);
+        }
+
+//        Transaction t = new Transaction(total, customer, items);
+        Transaction t = new Transaction();
+        t.setTotal(total);
+        t.setCustomer(customer);
+        t.setItems(items);
+
+        Long transactionId = transactionService.save(t);
+        Transaction transaction = transactionService.findById(transactionId);
+        response.put("transaction", transaction);
         return response;
     }
 }

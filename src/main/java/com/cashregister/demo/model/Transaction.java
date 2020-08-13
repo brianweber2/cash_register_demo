@@ -1,5 +1,6 @@
 package com.cashregister.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
@@ -22,11 +23,7 @@ public class Transaction {
     @OneToMany(mappedBy = "transaction")
     private List<Item> items;
 
-    public Transaction(double total, Customer customer, List<Item> items) {
-        this.total = total;
-        this.customer = customer;
-        this.items = items;
-    }
+    public Transaction() {}
 
     public Long getId() {
         return id;

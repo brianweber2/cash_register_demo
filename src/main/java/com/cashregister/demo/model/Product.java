@@ -1,12 +1,8 @@
 package com.cashregister.demo.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class Product {
@@ -19,10 +15,10 @@ public class Product {
     private String name;
 
     @NotNull
-    private BigDecimal defaultPrice;
+    private double defaultPrice;
 
     @NotNull
-    private BigDecimal discountPrice;
+    private double discountPrice;
 
     public Product() {}
 
@@ -42,19 +38,19 @@ public class Product {
         this.name = name;
     }
 
-    public BigDecimal getDefaultPrice() {
+    public double getDefaultPrice() {
         return defaultPrice;
     }
 
-    public void setDefaultPrice(BigDecimal defaultPrice) {
+    public void setDefaultPrice(double defaultPrice) {
         this.defaultPrice = defaultPrice;
     }
 
-    public BigDecimal getDiscountPrice() {
+    public double getDiscountPrice() {
         return discountPrice;
     }
 
-    public void setDiscountPrice(BigDecimal discountPrice) {
+    public void setDiscountPrice(double discountPrice) {
         this.discountPrice = discountPrice;
     }
 }
